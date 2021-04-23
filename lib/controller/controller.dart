@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:sms/sms.dart';
 import 'package:wiki/service/fetch.dart';
@@ -27,5 +29,16 @@ class Controller extends GetxController {
     List<SimCard> card = await provider.getSimCards();
     SmsMessage message = new SmsMessage(address, msg);
     sender.sendSms(message, simCard: card[0]);
+  }
+
+  toast(String msg) {
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0);
   }
 }
