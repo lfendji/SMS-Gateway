@@ -26,7 +26,7 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Color.fromRGBO(0, 9, 24, 0),
+        backgroundColor: Color.fromRGBO(0, 9, 24, 0.1),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
