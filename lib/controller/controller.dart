@@ -4,25 +4,17 @@ import 'package:get/get.dart';
 import 'package:sms/sms.dart';
 import 'package:wiki/service/fetch.dart';
 
-class Controller extends GetxController {
+class SMSController extends GetxController {
   Fetch fetch = Fetch();
   SmsQuery query = new SmsQuery();
   SimCardsProvider provider = new SimCardsProvider();
   SmsSender sender = new SmsSender();
 
-  @override
-  void onInit() async {
-    super.onInit();
-    var data = await readSms();
-    print(data);
-    // await readSms().then((value) async => await fetch
-    //     .sendData(value["body"])
-    //     .then((val) async => await sendSMS(val, value["address"])));
-  }
-
-  Future readSms() async {
+  readSms() async {
     List<SmsMessage> messages = await query.getAllSms;
-    return {"body": messages.first.body, "address": messages.first.address};
+    var data = {"body": messages.first.body, "address": messages.first.address};
+    toast(data["body"]);
+    return data;
   }
 
   sendSMS(String address, String msg) async {
@@ -40,5 +32,11 @@ class Controller extends GetxController {
         backgroundColor: Colors.grey,
         textColor: Colors.white,
         fontSize: 16.0);
+  }
+
+  entMethod() async {
+    await readSms().then((value) {
+      print(value);
+    });
   }
 }
