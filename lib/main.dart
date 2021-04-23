@@ -26,13 +26,13 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('IA Send && Read SMS'),
-        ),
+        backgroundColor: Color.fromRGBO(0, 9, 24, 0),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[],
+            children: <Widget>[
+              Image.asset("assets/face.png"),
+            ],
           ),
         ),
       ),
