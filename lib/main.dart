@@ -26,13 +26,12 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Color.fromRGBO(0, 9, 24, 0.1),
+        // backgroundColor: Color.fromRGBO(147, 214, 233, 1),
+        backgroundColor: Color.fromRGBO(0, 9, 24, 1),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Image.asset("assets/face.png"),
-            ],
+            children: <Widget>[Image.asset("assets/face.png")],
           ),
         ),
       ),
