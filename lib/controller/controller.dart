@@ -44,8 +44,12 @@ class SMSController extends GetxController {
   }
 
   entMethod() async {
-    dynamic data = await readSms();
-    print(data);
-    await fetch.sendData(data).then((value) => print(value));
+    var data;
+    await readSms().then((value) {
+      data = value;
+      print(data);
+    });
+    // print(data);
+    // await fetch.sendData(data).then((value) => print(value));
   }
 }
