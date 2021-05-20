@@ -8,7 +8,7 @@ class SMSController extends GetxController with StateMixin<dynamic> {
   Fetch fetch = Fetch();
   SmsQuery query = new SmsQuery();
   SimCardsProvider provider = new SimCardsProvider();
-
+  var address = "".obs;
   @override
   void onInit() {
     super.onInit();
@@ -17,9 +17,21 @@ class SMSController extends GetxController with StateMixin<dynamic> {
 
   Future<dynamic> readSms() async {
     List<SmsMessage> messages = await query.getAllSms;
-    Map data = {"body": messages.first.body, "address": messages.first.address};
-    toast(data["body"]);
-    return data;
+    if (messages.first.address.length >= 9) {
+      Map data = {
+        "body": messages.first.body,
+        "address": messages.first.address
+      };
+      toast(data["body"]);
+      address.value = messages.first.address;
+      return data;
+    } else if (messages.first.address.length < 9) {
+      Map data = {"body": "Cet sms n'est pas valide", "address": "test"};
+      toast(data["body"]);
+      return data;
+    } else {
+      return {"body": "aucune idée", "address": "fantome"};
+    }
   }
 
   sendSMS(String address, String msg) async {
@@ -51,10 +63,14 @@ class SMSController extends GetxController with StateMixin<dynamic> {
 
   entMethod() async {
     await readSms().then((value) async {
+      print(address.value);
       await fetch.sendData({
         "address": value["address"].toString(),
         "msg": value["body"].toString()
-      }).then((value) => print(value));
+      }).then((value) async {
+        print(value);
+        await sendSMS(address.value, value["response"]);
+      });
     });
   }
 }
