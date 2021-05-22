@@ -69,7 +69,7 @@ class SMSController extends GetxController with StateMixin<dynamic> {
         "msg": value["body"].toString()
       }).then((value) async {
         print(value);
-        await sendSMS(address.value, value["response"]);
+        await sendSMS(address.value, value["result"]);
       });
     });
   }
