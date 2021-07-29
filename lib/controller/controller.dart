@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:sms/sms.dart';
+import 'package:sms/sms.dart' as sms;
 import 'package:wiki/service/fetch.dart';
+import 'package:telephony/telephony.dart';
 
 class SMSController extends GetxController with StateMixin<dynamic> {
   Fetch fetch = Fetch();
-  SmsQuery query = new SmsQuery();
-  SimCardsProvider provider = new SimCardsProvider();
+  sms.SmsQuery query = new sms.SmsQuery();
+  sms.SimCardsProvider provider = new sms.SimCardsProvider();
+  final Telephony telephony = Telephony.instance;
+
   var address = "".obs;
+  var isloading = false.obs;
   @override
   void onInit() {
     super.onInit();
@@ -16,7 +20,7 @@ class SMSController extends GetxController with StateMixin<dynamic> {
   }
 
   Future<dynamic> readSms() async {
-    List<SmsMessage> messages = await query.getAllSms;
+    List<sms.SmsMessage> messages = await query.getAllSms;
     if (messages.first.address.length >= 9) {
       Map data = {
         "body": messages.first.body,
@@ -35,14 +39,14 @@ class SMSController extends GetxController with StateMixin<dynamic> {
   }
 
   sendSMS(String address, String msg) async {
-    List<SimCard> card = await provider.getSimCards();
-    SmsMessage message = new SmsMessage(address, msg);
-    SmsSender sender = new SmsSender();
+    List<sms.SimCard> card = await provider.getSimCards();
+    sms.SmsMessage message = new sms.SmsMessage(address, msg);
+    sms.SmsSender sender = new sms.SmsSender();
     sender.sendSms(message, simCard: card[0]);
     message.onStateChanged.listen((event) {
-      if (event == SmsMessageState.Sent) {
+      if (event == sms.SmsMessageState.Sent) {
         toast("Envoyer avec succés");
-      } else if (event == SmsMessageState.Delivered) {
+      } else if (event == sms.SmsMessageState.Delivered) {
         toast("Message reussi avec succés");
       } else {
         toast("Message n'a pas été envoyé");
@@ -64,12 +68,17 @@ class SMSController extends GetxController with StateMixin<dynamic> {
   entMethod() async {
     await readSms().then((value) async {
       print(address.value);
+      isloading.value = true;
       await fetch.sendData({
         "address": value["address"].toString(),
         "msg": value["body"].toString()
       }).then((value) async {
-        print(value);
-        await sendSMS(address.value, value["result"]);
+        isloading.value = false;
+
+        telephony.sendSms(
+            to: value["address"],
+            message: value["msg"].toString(),
+            isMultipart: true);
       });
     });
   }

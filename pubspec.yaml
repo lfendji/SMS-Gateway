@@ -30,6 +30,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.1.4
   sms: ^0.2.4
+  telephony: ^0.1.4
   fluttertoast: ^8.0.6
 
 dev_dependencies:

@@ -11,7 +11,29 @@ class Home extends GetView<SMSController> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[Image.asset("assets/face.png")],
+          children: <Widget>[
+            Image.asset("assets/face.png"),
+            SizedBox(height: 200),
+            Obx(() => controller.isloading.value
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      color: Colors.white,
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 15, top: 8, bottom: 8),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Traitement en cours ...",
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          CircularProgressIndicator()
+                        ],
+                      ),
+                    ))
+                : Container())
+          ],
         ),
       ),
     );
